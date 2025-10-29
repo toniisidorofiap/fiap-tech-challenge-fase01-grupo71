@@ -2,3 +2,9 @@ fastapi[standard]
 streamlit
 pandas
 uvicorn
+kagglehub
+tensorflow
+numpy
+scikit-learn
+matplotlib
+tf-keras-vis
