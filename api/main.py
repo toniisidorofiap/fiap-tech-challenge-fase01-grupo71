@@ -4,10 +4,8 @@ from typing import List
 from pathlib import Path
 from PIL import Image
 import numpy as np
-import tensorflow as tf
 import aiofiles
-
-app = FastAPI()
+from tensorflow import keras
 
 # Create uploads directory if it doesn't exist
 UPLOAD_DIR = Path(__file__).parent / "uploads"
@@ -16,18 +14,20 @@ UPLOAD_DIR.mkdir(exist_ok=True)
 # Allowed file extensions
 ALLOWED_EXTENSIONS = {'.png', '.jpg', '.jpeg'}
 
-app = FastAPI()
-
-ml_models = {}
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Load the ML model
+    # Load the ML model after the process has started to avoid pre-fork initialization issues
     model_path = Path(__file__).parent / "model" / "MobileNetV2.h5"
-    ml_models["MobileNetV2"] = tf.keras.models.load_model(str(model_path))
+    app.state.model = keras.models.load_model(str(model_path))
     yield
-    # Clean up the ML models and release the resources
-    ml_models.clear
+    # Clean up the ML model and release resources
+    app.state.model = None
+
+
+app = FastAPI(debug=True, lifespan=lifespan)
+
+ml_models = {}
 
 
 @app.post("/analyze-images")
@@ -58,7 +58,13 @@ async def analyze_images(files: List[UploadFile] = File(...)):
             image_array = np.array(image) / 255.0
             image_array = np.expand_dims(image_array, axis=0)  # batch dimension
 
-            model = ml_models["MobileNetV2"]
+            model = getattr(app.state, "model", None)
+            if model is None:
+                # Fallback: load on demand (e.g., if lifespan didn't run)
+                model_path = Path(__file__).parent / "model" / "MobileNetV2.h5"
+                model = keras.models.load_model(str(model_path))
+                app.state.model = model
+
             prediction = model.predict(image_array)
             probability = float(prediction[0][0])
             has_disease = probability >= 0.91
