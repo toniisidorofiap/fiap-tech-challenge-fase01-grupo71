@@ -117,8 +117,8 @@ if uploaded_files:
                                     st.write(f"**Nome do arquivo:** {file.name}")
                                     st.write(f"**Tipo do arquivo:** {file.type}")
                                     st.write(f"**Tamanho do arquivo:** {file.size} bytes")
-                                    st.write("✅ Status: Sucesso")
-                                    st.write(f"🔍 Doença detectada: {'Sim' if r['disease_detected'] else 'Não'}")
+                                    st.write(f"🔍 Tuberculose detectada: {'Sim' if r['disease_detected'] else 'Não'}")
+                                    st.write(f"🔍 Probabilidade: {float(r['probability']) * 100:.2f}%")
                                     if r['disease_detected']:
                                         st.warning("⚠️ Recomendada avaliação médica detalhada")
                                     else:
