@@ -51,7 +51,10 @@ if 'uploader_key' not in st.session_state:
 if 'dialog_open' not in st.session_state:
     st.session_state.dialog_open = False
 
-probability_threshold = st.number_input("Informe o limitador de probabilidade no qual irá considerar um exame positivo (recomendado 91%):", min_value=0, max_value=100, value=91, step=1)
+st.write("Este aplicativo permite o upload de imagens de exames de raio-x para análise de tuberculose utilizando um modelo de Machine Learning.")
+
+st.info("Defina no campo abaixo o limite de probabilidade para classificar uma imagem como positiva para tuberculose. Recomendado: 91%.")
+probability_threshold = st.number_input("", min_value=0, max_value=100, value=91, step=1, width=150, label_visibility="collapsed")
 
 uploaded_files = st.file_uploader(
     "Faça o upload das imagens de exames raio-x para análise:",
