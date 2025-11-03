@@ -1,6 +1,7 @@
 fastapi[standard]
 streamlit
 pandas
+gunicorn
 uvicorn
 kagglehub
 tensorflow
@@ -8,3 +9,5 @@ numpy
 scikit-learn
 matplotlib
 tf-keras-vis
+opencv-python
+aiofiles
