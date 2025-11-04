@@ -12,6 +12,37 @@ Dataset utilizado: https://www.kaggle.com/datasets/tawsifurrahman/tuberculosis-t
 O modelo pode ser treinado localmente utilizando o notebook `tech_challenge_tuberculose.ipynb` localizado na pasta `train_model/`.
 Alternativamente, você pode abrir este notebook diretamente no [Google Colab](https://colab.research.google.com/) para execução na nuvem, sem necessidade de configuração local.
 
+Para treinar o modelo no Mac com processador silicon (M1, M2, M3, M4, etc) recomenda-se usar o conda e instalar o tensorflow-macos e tensorflow-metal habilitando assim o uso de gpu.
+```bash
+brew install --cask miniforge 
+conta init zsh # ou bash se não estiver usando zsh
+conda create -p ./.fiap-tf python=3.9
+conda activate ./.fiap-tf
+python -m pip install --upgrade pip setuptools wheel
+pip install tensorflow-macos tensorflow-metal
+# Não rode pip install tensorflow (isso instala a versão CPU/Intel e pode conflitar).
+pip install -r req_no_tf_mac.txt # da o install no requirements sem o tensorflow declarado
+# se der erro no opencv-python tente conda install -c conda-forge opencv
+
+#Verificação rápida — confirmar TF + Metal/GPU, se não der nenhum erro o setup no mac esta correto
+python - <<'PY'
+import time, numpy as np, tensorflow as tf
+print("TensorFlow version:", tf.__version__)
+print("Physical devices:", tf.config.list_physical_devices())
+gpus = tf.config.list_physical_devices('GPU')
+print("GPUs found:", gpus)
+# Quick matmul to exercise device
+a = tf.random.uniform([2000,2000])
+b = tf.random.uniform([2000,2000])
+t0 = time.time()
+c = tf.matmul(a,b)
+# force execution
+_ = c.numpy()
+print("Matmul time (s):", time.time() - t0)
+PY
+```
+
+
 # Como rodar o projeto
 ## Rodando localmente (sem Docker)
 1. Crie e ative um ambiente virtual com Python 3.10+:
