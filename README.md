@@ -8,6 +8,7 @@ Este projeto fornece uma API para análise de imagens de exames raio-x para dete
 - Docker e Docker Compose (para rodar em containers)
 
 # Treinando o Modelo
+Dataset utilizado: https://www.kaggle.com/datasets/tawsifurrahman/tuberculosis-tb-chest-xray-dataset
 O modelo pode ser treinado localmente utilizando o notebook `tech_challenge_tuberculose.ipynb` localizado na pasta `train_model/`.
 Alternativamente, você pode abrir este notebook diretamente no [Google Colab](https://colab.research.google.com/) para execução na nuvem, sem necessidade de configuração local.
 
