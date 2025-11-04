@@ -19,7 +19,7 @@ ALLOWED_EXTENSIONS = {'.png', '.jpg', '.jpeg', '.bmp', '.tif', '.tiff'}
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Load the ML model after the process has started to avoid pre-fork initialization issues
-    model_path = Path(__file__).parent / "model" / "MobileNetV2.h5"
+    model_path = Path(__file__).parent / "model" / "mobileNetV2.keras"
     app.state.model = keras.models.load_model(str(model_path))
     yield
     # Clean up the ML model and release resources
@@ -62,7 +62,7 @@ async def analyze_images(files: List[UploadFile] = File(...), probability_thresh
             model = getattr(app.state, "model", None)
             if model is None:
                 # Fallback: load on demand (e.g., if lifespan didn't run)
-                model_path = Path(__file__).parent / "model" / "MobileNetV2.h5"
+                model_path = Path(__file__).parent / "model" / "mobileNetV2.keras"
                 model = keras.models.load_model(str(model_path))
                 app.state.model = model
 

@@ -5,7 +5,7 @@ gunicorn
 uvicorn
 kagglehub
 tensorflow
-numpy
+numpy==1.26.4
 scikit-learn
 matplotlib
 tf-keras-vis
