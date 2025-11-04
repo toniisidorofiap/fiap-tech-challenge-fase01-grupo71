@@ -4,7 +4,7 @@
 Este projeto fornece uma API para análise de imagens de exames raio-x para detecção de tuberculose, além de uma interface web feita com Streamlit para o upload e visualização dos resultados.
 
 # Requisitos
-- Python 3.10+ (para rodar local)
+- Python 3.9+ (para rodar local)
 - Docker e Docker Compose (para rodar em containers)
 
 # Treinando o Modelo
@@ -23,7 +23,7 @@ conda activate ./.fiap-tf
 python -m pip install --upgrade pip setuptools wheel
 pip install tensorflow-macos tensorflow-metal
 # Não rode pip install tensorflow (isso instala a versão CPU/Intel e pode conflitar).
-pip install -r req_no_tf_mac.txt # da o install no requirements sem o tensorflow declarado
+pip install -r req_no_tf_mac.txt # da o install no requirements sem instalar o tensorflow para poder usar o tensorflow-metal ja instalado
 # se der erro no opencv-python tente conda install -c conda-forge opencv
 
 #Verificação rápida — confirmar TF + Metal/GPU, se não der nenhum erro o setup no mac esta correto
@@ -55,7 +55,11 @@ PY
 	```
 2. Instale as dependências:
 	```bash
+	# no linux/windows
 	pip install -r requirements.txt
+
+	# no mac
+	pip install -r req_no_tf_mac.txt # da o install no requirements sem instalar o tensorflow para poder usar o tensorflow-metal ja instalado
 	```
 3. Inicie a API:
 	```bash

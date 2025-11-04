@@ -216,9 +216,11 @@ api/model/*
 !api/model/.gitkeep
 tech_challenge_tuberculose_files/*
 !tech_challenge_tuberculose_files/.gitkeep
-*.aux
-*.log
-*.out
-*.tex
+pdf/*
+!pdf/.gitkeep
+**/*.aux
+**/*.log
+**/*.out
+**/*.tex
 .DS_Store
 **/.DS_Store
