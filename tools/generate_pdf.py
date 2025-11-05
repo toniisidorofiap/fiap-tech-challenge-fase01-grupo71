@@ -46,13 +46,16 @@ def sanitize(path):
     # This redefines the plain page style to empty and sets pagestyle empty.
     if re.search(r"\\begin\{document\}", s_new):
         # Use real newlines ("\n") instead of literal backslash-n so LaTeX is valid.
+        # Inject a counter to disable automatic section numbering (removes 1.1, 1.2 ...)
         replacement = (
             '\\makeatletter\\def\\ps@plain{\\ps@empty}\\makeatother\n'
-            '\\pagestyle{empty}\n\\n% --- injected by sanitizer: clear running headers/footers\n\\begin{document}'
+            '\\pagestyle{empty}\n'
+            '\\setcounter{secnumdepth}{0}\n'
+            '% --- injected by sanitizer: clear running headers/footers and disable section numbers\n'
+            '\\begin{document}'
         )
-    # Use a lambda so backslashes in the replacement are not treated as
-    # regex backreference escapes by the re engine.
-    s_new = re.sub(r"\\begin\{document\}", lambda m: replacement, s_new, count=1)
+    # Use a direct string replace to avoid regex backreference handling and satisfy linters.
+    s_new = s_new.replace("\\begin{document}", replacement, 1)
     if s_new == s:
         print("No changes made to", path)
     else:

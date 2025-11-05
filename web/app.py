@@ -53,6 +53,8 @@ if 'dialog_open' not in st.session_state:
 
 st.write("Este aplicativo permite o upload de imagens de exames de raio-x para análise de tuberculose utilizando um modelo de Machine Learning.")
 
+st.warning("⚠️ Lembre-se: este é um modelo de Machine Learning e pode não ser 100% preciso. Sempre consulte um profissional de saúde para diagnóstico definitivo.")
+
 st.info("Defina no campo abaixo o limite de probabilidade para classificar uma imagem como positiva para tuberculose. Recomendado: 91%.")
 probability_threshold = st.number_input("", min_value=0, max_value=100, value=91, step=1, width=150, label_visibility="collapsed")
 
@@ -100,8 +102,13 @@ if uploaded_files:
                 result = res.json()
                 count = len(files)
                 analysis_header.subheader(f"Resultados ({count} {'imagem analisada' if count == 1 else 'imagens analisadas'})")
-                st.success("Análise concluída para todos os arquivos!")
-                
+                # coloque na msg abaixo o total de r['disease_detected'] == True
+                total_disease = sum(1 for r in result.get("results", []) if r.get("disease_detected"))
+                if total_disease > 0:
+                    st.warning(f"⚠️ Total de imagens com tuberculose detectada: {total_disease} de {count}. Consulte um profissional de saúde para avaliação detalhada.")
+                else:
+                    st.success(f"✨ Nenhuma anomalia detectada em {count} imagens.")
+
                 # Display results for each file
                 if result.get("results"):
                     for file, r in zip(uploaded_files, result["results"]):
