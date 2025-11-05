@@ -217,6 +217,7 @@ api/model/*
 tech_challenge_tuberculose_files/*
 !tech_challenge_tuberculose_files/.gitkeep
 pdf/*
+!pdf/assets
 !pdf/.gitkeep
 **/*.aux
 **/*.log
